@@ -1,0 +1,3 @@
+﻿  array.cpp
+C:\Users\vladm\Desktop\ООП\21212_Menshchikov\HW\class_Array\array.cpp(225,23): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+  array.vcxproj -> C:\Users\vladm\Desktop\ООП\21212_Menshchikov\HW\class_Array\Debug\array.exe
