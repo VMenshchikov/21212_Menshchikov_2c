@@ -2,5 +2,7 @@
     "files.associations": {
         "string": "cpp",
         "list": "cpp"
-    }
+    },
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": true
 }

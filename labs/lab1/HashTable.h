@@ -55,7 +55,7 @@ public:
     friend bool operator!=(const HashTable &a, const HashTable &b);
 
 private:
-    TValue **TTable;
+    TList **TTable;
     int iSize = 32;
     int iCount = 0;
 };
