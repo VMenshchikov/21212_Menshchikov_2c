@@ -1,5 +1,10 @@
+#pragma once
+
 #include <string>
 #include <list>
+
+#define START_SIZE 1024
+
 typedef std::string Key;
 
 struct TValue
@@ -8,19 +13,16 @@ struct TValue
     unsigned weight = -1;
 };
 
-struct TList
-{
-    std::list<TValue> List;
-};
-
 class HashTable
 {
 public:
+
+
     HashTable();
     ~HashTable();
 
     HashTable(const HashTable &b);
-    HashTable(const HashTable &&b);
+    HashTable(HashTable &&b);
 
     // Обменивает значения двух хэш-таблиц.
     // Подумайте, зачем нужен этот метод, при наличии стандартной функци
@@ -49,13 +51,33 @@ public:
     const TValue &at(const Key &k) const;
 
     size_t size() const;
+    size_t count() const;
     bool empty() const;
 
     friend bool operator==(const HashTable &a, const HashTable &b);
     friend bool operator!=(const HashTable &a, const HashTable &b);
 
 private:
-    TList **TTable;
-    int iSize = 32;
-    int iCount = 0;
+    struct TList
+    {
+        Key k = "";
+        TValue value;
+
+        TList(const Key &k);
+        TList() = default;
+        TList(const Key &k, const TValue &value);
+        ~TList() = default;
+    };
+
+    std::list<TList>* TTable = nullptr;
+    size_t iSize = START_SIZE;
+    size_t iCount = 0;
+
+   
+
+    size_t GetHash(const Key &k) const;
+    HashTable&& ReCreation(HashTable &b);
+    bool contains(const Key &k, size_t hash) const;
+    bool erase(const Key &k, const size_t hash);
+    bool del(const Key &k, const size_t hash);
 };
