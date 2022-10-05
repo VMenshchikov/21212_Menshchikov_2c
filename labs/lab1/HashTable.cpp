@@ -84,12 +84,14 @@ bool HashTable::insert(const Key &k, const TValue &v) {
     }
 
     if(iCount > iSize*0.7) {
-        *this = ReCreation(*this);
+        *this = ReCreation();
     }
 
     TList tmp(k, v);
+    if(TTable[hash].empty()) {
+        iCount++;
+    }
     TTable[hash].push_back(TList(k, v));
-    iCount++;
     return true;
 }
 
@@ -222,6 +224,11 @@ bool HashTable::del(const Key &k, const size_t hash) {
 
 HashTable&& HashTable::ReCreation() {
     HashTable b(iSize * 2);
-    b.iCount = iCount;
-    // какой размер возбмется?
+    for (size_t i = 0; i < iSize; ++i) {
+        auto j = TTable[i].begin();
+        for (j; j != TTable[i].end(); j++) {
+            b.insert(j->k, j->value);
+        }
+    }
+    *this = std::move(b);
 }

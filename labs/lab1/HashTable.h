@@ -19,6 +19,7 @@ public:
 
 
     HashTable();
+    HashTable(size_t iSize);
     ~HashTable();
 
     HashTable(const HashTable &b);
@@ -76,7 +77,7 @@ private:
    
 
     size_t GetHash(const Key &k) const;
-    HashTable&& ReCreation(HashTable &b);
+    HashTable&& ReCreation();
     bool contains(const Key &k, size_t hash) const;
     bool erase(const Key &k, const size_t hash);
     bool del(const Key &k, const size_t hash);
