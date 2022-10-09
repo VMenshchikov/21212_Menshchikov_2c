@@ -3,21 +3,25 @@
 #include <string>
 #include <list>
 
-#define START_SIZE 1024
+#define START_SIZE 16 
+#define RECREATION_COEF 0.5f
 
 typedef std::string Key;
 
 struct TValue
 {
-    unsigned age = -1;
-    unsigned weight = -1;
+    int age = -1;
+    int weight = -1;
+
+    TValue() = default;
+    TValue(unsigned age, unsigned weight);
+
+    friend bool operator==(const TValue& a,const TValue& b);
 };
 
 class HashTable
 {
 public:
-
-
     HashTable();
     HashTable(size_t iSize);
     ~HashTable();
@@ -31,6 +35,7 @@ public:
     void swap(HashTable &b);
 
     HashTable &operator=(const HashTable &b);
+    HashTable &operator=(HashTable &&b);
 
     // Очищает контейнер.
     void clear();
@@ -68,17 +73,18 @@ private:
         TList() = default;
         TList(const Key &k, const TValue &value);
         ~TList() = default;
+
     };
 
     std::list<TList>* TTable = nullptr;
     size_t iSize = START_SIZE;
     size_t iCount = 0;
 
-   
-
     size_t GetHash(const Key &k) const;
-    HashTable&& ReCreation();
+    void ReCreation();
     bool contains(const Key &k, size_t hash) const;
     bool erase(const Key &k, const size_t hash);
     bool del(const Key &k, const size_t hash);
+    friend bool operator==(const HashTable::TList &a, const HashTable::TList &b);
+
 };
