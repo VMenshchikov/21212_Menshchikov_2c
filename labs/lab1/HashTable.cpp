@@ -1,20 +1,15 @@
-#include <iostream>
-#include <cassert>
 #include "HashTable.h"
+#include <cassert>
+#include <iostream>
 
-TValue::TValue(unsigned age, unsigned weight) :     
-                    age(static_cast<int>(age)),
-                    weight(static_cast<int>(weight)) {};
+TValue::TValue(unsigned age, unsigned weight)
+    : age(static_cast<int>(age)), weight(static_cast<int>(weight)){};
 
-bool operator==(const TValue& a,const TValue& b) {
+bool operator==(const TValue &a, const TValue &b) {
     return (a.age == b.age && a.weight == b.weight);
 }
 
-
-
-HashTable::TList::TList(const Key &k, const TValue &value) :
-            k(k), value(value) { //в первую очередб смотри сюда!!!!!!!!!!!!!
-};
+HashTable::TList::TList(const Key &k, const TValue &value) : k(k), value(value){};
 
 HashTable::HashTable() : iSize(START_SIZE), iCount(0) {
     TTable = new std::list<TList>[iSize];
@@ -25,17 +20,17 @@ HashTable::HashTable(size_t iSize) : iSize(iSize), iCount(0) {
 }
 
 HashTable::~HashTable() {
-    clear(); //очищаются ли листы в delete?
+    clear();
     delete[] TTable;
 }
 
 HashTable::HashTable(const HashTable &b) : iSize(b.iSize), iCount(b.iCount) {
     TTable = new std::list<TList>[iSize];
-    std::copy(b.TTable, b.TTable + iSize, TTable);  
+    std::copy(b.TTable, b.TTable + iSize, TTable);
 }
 
-HashTable::HashTable(HashTable &&b) : 
-    iSize(b.iSize), iCount(b.iCount), TTable(b.TTable) {
+HashTable::HashTable(HashTable &&b)
+    : iSize(b.iSize), iCount(b.iCount), TTable(b.TTable) {
     b.iSize = 0;
     b.iCount = 0;
     b.TTable = nullptr;
@@ -49,13 +44,13 @@ void HashTable::swap(HashTable &b) {
     b = std::move(temp);
 }
 
-HashTable &HashTable::operator=(const HashTable &b)  {
+HashTable &HashTable::operator=(const HashTable &b) {
     if (&b == this) {
         return *this;
     }
-    iCount=b.iCount;
-    iSize=b.iSize;
-    if(TTable != nullptr) {
+    iCount = b.iCount;
+    iSize = b.iSize;
+    if (TTable != nullptr) {
         clear();
     } else {
         TTable = new std::list<TList>[iSize];
@@ -64,7 +59,7 @@ HashTable &HashTable::operator=(const HashTable &b)  {
     return *this;
 }
 
-HashTable& HashTable::operator=(HashTable&& b) {
+HashTable &HashTable::operator=(HashTable &&b) {
     iSize = b.iSize;
     iCount = b.iCount;
     if (&b == this) {
@@ -80,7 +75,7 @@ HashTable& HashTable::operator=(HashTable&& b) {
 void HashTable::clear() {
     if (TTable != nullptr) {
         for (int i = 0; i < iSize; ++i) {
-                TTable[i].clear();
+            TTable[i].clear();
         }
         iCount = 0;
     }
@@ -97,11 +92,11 @@ bool HashTable::insert(const Key &k, const TValue &v) {
         return false;
     }
 
-    if(iCount > iSize*RECREATION_COEF) { 
+    if (iCount > iSize * RECREATION_COEF) {
         ReCreation();
     }
 
-    if(TTable[hash].empty()) {
+    if (TTable[hash].empty()) {
         iCount++;
     }
     TTable[hash].push_back(TList(k, v));
@@ -121,12 +116,9 @@ bool HashTable::contains(const Key &k) const {
 }
 
 bool HashTable::contains(const Key &k, size_t hash) const {
-    if (!TTable[hash].empty())
-    {
-        for (auto i = TTable[hash].begin(); i != TTable[hash].end(); i++)
-        {
-            if (i->k == k)
-            {
+    if (!TTable[hash].empty()) {
+        for (auto i = TTable[hash].begin(); i != TTable[hash].end(); i++) {
+            if (i->k == k) {
                 return true;
             }
         }
@@ -136,13 +128,10 @@ bool HashTable::contains(const Key &k, size_t hash) const {
 
 TValue &HashTable::operator[](const Key &k) {
     auto hash = GetHash(k);
-    if (!TTable[hash].empty())
-    {
+    if (!TTable[hash].empty()) {
         auto i = TTable[hash].begin();
-        for (i; i != TTable[hash].end(); i++)
-        {
-            if (i->k == k)
-            {
+        for (i; i != TTable[hash].end(); i++) {
+            if (i->k == k) {
                 return (i->value);
             }
         }
@@ -151,7 +140,7 @@ TValue &HashTable::operator[](const Key &k) {
     return TTable[GetHash(k)].front().value;
 }
 
-TValue& HashTable::at(const Key &k) {
+TValue &HashTable::at(const Key &k) {
     auto hash = GetHash(k);
     if (!TTable[hash].empty()) {
         auto i = TTable[hash].begin();
@@ -165,7 +154,7 @@ TValue& HashTable::at(const Key &k) {
     throw(-1);
 }
 
-const TValue& HashTable::at(const Key &k) const {
+const TValue &HashTable::at(const Key &k) const {
     auto hash = GetHash(k);
     if (!TTable[hash].empty()) {
         auto i = TTable[hash].begin();
@@ -176,31 +165,23 @@ const TValue& HashTable::at(const Key &k) const {
         }
     }
     std::cerr << "invalid index" << std::endl;
-    throw(-1); 
+    throw(-1);
 }
 
+size_t HashTable::size() const { return HashTable::iSize; }
 
-size_t HashTable::size() const {
-    return HashTable::iSize;
-}
+size_t HashTable::count() const { return HashTable::iCount; }
 
-size_t HashTable::count() const {
-    return HashTable::iCount;
-}
+bool HashTable::empty() const { return !(HashTable::iCount); }
 
-bool HashTable::empty() const {
-    return !(HashTable::iCount);
-}
-
-bool operator==(const HashTable::TList& a, const HashTable::TList& b) {
-    return ((a.k == b.k) && (a.value == b.value)) ?  true :  false;
+bool operator==(const HashTable::TList &a, const HashTable::TList &b) {
+    return ((a.k == b.k) && (a.value == b.value)) ? true : false;
 }
 
 bool operator==(const HashTable &a, const HashTable &b) {
     if (&a == &b) {
         return true;
-    } else 
-    if (a.size() != b.size()) {
+    } else if (a.size() != b.size()) {
         return false;
     } else {
         for (size_t i = 0; i < a.size(); ++i) {
@@ -212,14 +193,12 @@ bool operator==(const HashTable &a, const HashTable &b) {
     return true;
 }
 
-bool operator!=(const HashTable &a, const HashTable &b) {
-    return !(a==b);
-}
+bool operator!=(const HashTable &a, const HashTable &b) { return !(a == b); }
 
 size_t HashTable::GetHash(const Key &k) const {
     size_t hash = 1;
     size_t degree = 1;
-    for (int i = 0; i < k.size(); i++) { 
+    for (int i = 0; i < k.size(); i++) {
         hash += static_cast<size_t>(k[i]) * degree;
         degree *= 3;
     }

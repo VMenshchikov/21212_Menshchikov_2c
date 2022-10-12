@@ -1,27 +1,25 @@
 #pragma once
 
-#include <string>
 #include <list>
+#include <string>
 
-#define START_SIZE 16 
+#define START_SIZE 16
 #define RECREATION_COEF 0.5f
 
 typedef std::string Key;
 
-struct TValue
-{
+struct TValue {
     int age = -1;
     int weight = -1;
 
     TValue() = default;
     TValue(unsigned age, unsigned weight);
 
-    friend bool operator==(const TValue& a,const TValue& b);
+    friend bool operator==(const TValue &a, const TValue &b);
 };
 
-class HashTable
-{
-public:
+class HashTable {
+  public:
     HashTable();
     HashTable(size_t iSize);
     ~HashTable();
@@ -30,8 +28,6 @@ public:
     HashTable(HashTable &&b);
 
     // Обменивает значения двух хэш-таблиц.
-    // Подумайте, зачем нужен этот метод, при наличии стандартной функци
-    // std::swap.
     void swap(HashTable &b);
 
     HashTable &operator=(const HashTable &b);
@@ -63,9 +59,8 @@ public:
     friend bool operator==(const HashTable &a, const HashTable &b);
     friend bool operator!=(const HashTable &a, const HashTable &b);
 
-private:
-    struct TList
-    {
+  private:
+    struct TList {
         Key k = "";
         TValue value;
 
@@ -73,18 +68,20 @@ private:
         TList() = default;
         TList(const Key &k, const TValue &value);
         ~TList() = default;
-
     };
 
-    std::list<TList>* TTable = nullptr;
+    std::list<TList> *TTable = nullptr;
     size_t iSize = START_SIZE;
+    //занятые ячейки таблицы(не кол-во элементов в ней)
     size_t iCount = 0;
 
     size_t GetHash(const Key &k) const;
+    //Пересобирает таблицу, при count > RECREATION_COEF
     void ReCreation();
+    //дублирующие методы для избежания повторного подсчета хеша
     bool contains(const Key &k, size_t hash) const;
     bool erase(const Key &k, const size_t hash);
+    //обертка erase
     bool del(const Key &k, const size_t hash);
     friend bool operator==(const HashTable::TList &a, const HashTable::TList &b);
-
 };
