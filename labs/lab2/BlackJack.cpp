@@ -1,5 +1,5 @@
 #include "BlackJack.hpp"
 
-BlackJackSettings::BlackJackSettings(std::string AllArgs) {
+TBlackJackSettings::TBlackJackSettings(std::string AllArgs) {
     //Bet ModeDeck ModeGame Players
 }

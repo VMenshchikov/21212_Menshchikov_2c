@@ -7,10 +7,9 @@
 #include <string>
 #include <vector>
 
-
-class BlackJackSettings {
+class TBlackJackSettings {
   public:
-    BlackJackSettings(std::string AllArgs);
+    TBlackJackSettings(std::string AllArgs);
 
     const std::string GetModeGame() const;
     const std::string GetPlayers() const;
@@ -33,19 +32,20 @@ class BlackJackSettings {
     int Bet;
 };
 
-class BlackJack {
+class TBlackJack {
   public:
-    BlackJack(std::string AllArgs);
+    TBlackJack(std::string AllArgs);
     void CreateDeck(int ModeDeck);
-    int GetCard();
     int StartGame();
+
+    friend const int TakeCard(TBlackJack &table);
+    friend const int GetSizeDeck(const TBlackJack &table);
+    friend const std::list<int> TakeVisibleCards(const TBlackJack &table);
 
   private:
     std::vector<int> AllVisibleCards;
     int CurrentSizeDeck;
     std::list<int> CurrentDeck;
 
-        
-
-    BlackJackSettings Settings;
+    TBlackJackSettings Settings;
 };
