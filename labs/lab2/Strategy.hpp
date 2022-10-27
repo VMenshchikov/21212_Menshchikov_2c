@@ -6,43 +6,49 @@
 #include "BlackJack.hpp"
 
 struct THand {
-    THand(std::vector<int> cards, int bet);
     THand();
-    std::vector<int> MyCards;
-    int MySum;
-    int NumStep = 1;
-    int MyBet;
+    std::vector<int> MyCards = {};
+    size_t CountA = 0; // TUZ
+    size_t MySum = 0;
+    size_t NumStep = 1;
+    size_t MyBet = 0;
+    bool InGame = false;
 };
 
-class TStrategy{
+class TStrategy {
   public:
+    TStrategy(TBlackJack &table, int bet);
     // return
-    const int GetSum(int NumHand) const;
-    void Victory(int NumHand);
-    void Defeat(int NumHand);
+    const int GetSum(THand& hand) const;
+    void ResultPart(THand& hand, int DilerScore);
 
     // create object
-    virtual TStrategy *Create();
+    virtual TStrategy *Create() = 0;
 
-    virtual bool SelectAction();
+    //
+    virtual bool SelectAction() = 0;
 
   private:
+    void Victory(THand &hand);
+    void Defeat(THand &hand);
+
+    bool CheckStatus(THand &hand);
+
     // Take anouther card
-    void Hit(int NumHand);
+    bool Hit(THand& hand);
 
     // Take no more cards
-    void Stand(int NumHand);
+    bool Stand(THand& hand);
 
     // Increase the initial bet by 100% and take exactly one more card
-    void DoubleDown(int NumHand);
+    bool DoubleDown(THand& hand);
 
     // Create second hand from a starting hand
     // where both cards are the same value.
-    void Split();
+    bool Split();
 
     // Forfeit half the bet and end the hand immediately.
-    void Surrender(int NumHand);
-
+    bool Surrender(THand& hand);
 
     // true - all card is visible
     // false - only first card
@@ -53,4 +59,6 @@ class TStrategy{
     THand FirstHand;
     THand SecondHand;
     int MyBank;
+
+    TBlackJack &Table;
 };

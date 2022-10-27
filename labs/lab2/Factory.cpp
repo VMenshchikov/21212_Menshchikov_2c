@@ -23,4 +23,8 @@ TStrategyFactory *TStrategyFactory::GetInstance() {
     return instance;
 }
 
+TStrategy* TStrategyFactory::GetObject(std::string objKey) {
+      return callbacks[objKey]();
+    }
+
 TStrategyFactory::TStrategyFactory(){};

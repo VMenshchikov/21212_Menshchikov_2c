@@ -9,11 +9,14 @@
 
 class TBlackJackSettings {
   public:
-    TBlackJackSettings(std::string AllArgs);
+    TBlackJackSettings(size_t bet, size_t countDeck, std::string modeGame,
+                       std::vector<std::string> players);
+    TBlackJackSettings(size_t bet, size_t countDeck,
+                       std::vector<std::string> players);
 
     const std::string GetModeGame() const;
-    const std::string GetPlayers() const;
-    const int GetDeckMode() const;
+    const std::vector<std::string> GetPlayers() const;
+    const int GetModeDeck() const;
 
   private:
     // detailed/fast/tournament
@@ -24,7 +27,8 @@ class TBlackJackSettings {
 
     // all participating strategies
     // the first is always the dealer
-    std::vector<TStrategy> Players;
+    std::vector<TStrategy *> Players;
+    std::vector<std::string> PlayersStr;
 
     // 0 -- simple -- rand(10) + 1
     // 1 - 8 -- count of decks
@@ -34,13 +38,13 @@ class TBlackJackSettings {
 
 class TBlackJack {
   public:
-    TBlackJack(std::string AllArgs);
+    TBlackJack(int CountArg, char* args);
     void CreateDeck(int ModeDeck);
     int StartGame();
 
-    friend const int TakeCard(TBlackJack &table);
-    friend const int GetSizeDeck(const TBlackJack &table);
-    friend const std::list<int> TakeVisibleCards(const TBlackJack &table);
+    const int TakeCard();
+    const int GetSizeDeck() const;
+    const std::list<int> TakeVisibleCards() const;
 
   private:
     std::vector<int> AllVisibleCards;
