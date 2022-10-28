@@ -6,11 +6,11 @@
 
 class TStrategyFactory {
   public:
-    typedef TStrategy *(*CreateStrategyCallbeck)();
+    typedef TStrategy *(*CreateStrategyCallBack)();
 
     // Registering a strategy
     static bool RegisterStrategy(std::string NameStrategy,
-                                 CreateStrategyCallbeck Create);
+                                 CreateStrategyCallBack Create);
 
     // Removing a strategy from a factory
     bool UnregistredStrategy(std::string NamStrategy);
@@ -22,7 +22,7 @@ class TStrategyFactory {
     TStrategy* GetObject(std::string objKey) {};
 
   private:
-    typedef std::map<std::string, CreateStrategyCallbeck> CallbackMap;
+    typedef std::map<std::string, CreateStrategyCallBack> CallbackMap;
     CallbackMap callbacks;
 
     static TStrategyFactory *instance;
