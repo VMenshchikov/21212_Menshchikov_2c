@@ -23,7 +23,7 @@ class TBlackJackSettings {
     std::string ModeGame;
 
     // all participating strategies
-    // the first is always the dealer
+    // the first is always the dealer?
     std::vector<TStrategy *> Players;
     std::vector<std::string> PlayersStr;
 

@@ -6,7 +6,7 @@
 #include <string>
 
 bool TStrategyFactory::RegisterStrategy(std::string NameStrategy,
-                                        CreateStrategyCallbeck Create) {
+                                        CreateStrategyCallBack Create) {
     GetInstance()->callbacks.insert({NameStrategy, Create});
 }
 

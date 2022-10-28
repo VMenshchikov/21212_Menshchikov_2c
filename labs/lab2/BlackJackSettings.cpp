@@ -17,7 +17,6 @@ TBlackJackSettings::TBlackJackSettings(size_t bet, size_t countDeck,
     }
     ModeGame = players.size() == 2 ? "detailed" : "tournament";
 };
-// qq
 
 const int TBlackJackSettings::GetModeDeck() const { return ModeDeck; }
 const std::string TBlackJackSettings::GetModeGame() const { return ModeGame; }
