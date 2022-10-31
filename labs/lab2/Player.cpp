@@ -1,29 +1,23 @@
-#include "BlackJack.hpp"
+#include "Player.hpp"
 
-THand::THand(){};
+// const int TPlayer::GetSum(THand &hand) const { return hand.MySum; }
 
-TStrategy::TStrategy(TBlackJack &table, int bet) : Table(table) {
-    FirstHand.InGame = true;
-    FirstHand.MyBet = bet;
-    FirstHand.MyCards.push_back(table.TakeCard());
-     
-
-}
-
-const int TStrategy::GetSum(THand &hand) const { return hand.MySum; }
-
-void TStrategy::Victory(THand &hand) {
-    MyBank += 2 * hand.MyBet;
+bool TPlayer::Victory(THand &hand) {
+    MyBank += hand.MyBet * 2;
     hand = THand();
+    return true;
 }
 
-void TStrategy::Defeat(THand &hand) { hand = THand(); }
-
-void TStrategy::ResultPart(THand &hand, int DilerScore) {
-    hand.MySum > DilerScore ? Victory(hand) : Defeat(hand);
+bool TPlayer::Defeat(THand &hand) {
+    hand = THand();
+    return false;
 }
 
-bool TStrategy::CheckStatus(THand &hand) {
+bool TPlayer::ResultPart(THand &hand, int DilerScore) {
+    return hand.MySum > DilerScore ? Victory(hand) : Defeat(hand);
+}
+
+bool TPlayer::CheckStatus(THand &hand) {
     if (hand.MySum > 21 && hand.CountA) {
         hand.MySum -= 10;
         hand.CountA--;
@@ -31,21 +25,21 @@ bool TStrategy::CheckStatus(THand &hand) {
     return hand.MySum > 21 ? hand.InGame = false : true;
 }
 
-bool TStrategy::Hit(THand &hand) {
-    hand.MyCards.push_back(Table.TakeCard());
+bool TPlayer::Hit(THand &hand, TBlackJack &Table) {
+    hand.MyCards.push_back(Table.GetCard(Visible));
     hand.MySum += hand.MyCards.back();
     hand.NumStep++;
     return CheckStatus(hand);
 }
 
-bool TStrategy::Stand(THand &hand) { return false; }
+bool TPlayer::Stand(THand &hand) { return false; }
 
-bool TStrategy::DoubleDown(THand &hand) {
+bool TPlayer::DoubleDown(THand &hand, TBlackJack &Table) {
     hand.MyBet *= 2;
-    return Hit(hand);
+    return Hit(hand, Table);
 }
 
-bool TStrategy::Split() {
+bool TPlayer::Split(TBlackJack& Table) {
     if (FirstHand.MyCards.size() > 2 ||
         FirstHand.MyCards.front() != FirstHand.MyCards.back() ||
         FirstHand.NumStep > 1) {
@@ -62,14 +56,14 @@ bool TStrategy::Split() {
     SecondHand.MyBet = FirstHand.MyBet;
     SecondHand.InGame = true;
 
-    Hit(FirstHand);
+    Hit(FirstHand, Table);
     FirstHand.NumStep--;
-    Hit(SecondHand);
+    Hit(SecondHand, Table);
     SecondHand.NumStep--;
     return true;
 }
 
-bool TStrategy::Surrender(THand &hand) {
+bool TPlayer::Surrender(THand &hand) {
     if (hand.NumStep > 1) {
         std::cerr << "Surrender failed";
         throw(1);

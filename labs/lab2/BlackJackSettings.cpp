@@ -1,25 +1,31 @@
 #include "BlackJackSettings.hpp"
 #include "Factory.hpp"
+#include "boost/program_options.hpp"
 
-TBlackJackSettings::TBlackJackSettings(size_t bet, size_t countDeck,
-                                       std::string modeGame,
-                                       std::vector<std::string> players)
-    : Bet(bet), ModeDeck(countDeck), ModeGame(modeGame), PlayersStr(players) {
-    for (auto s : players) {
-        Players.push_back(TStrategyFactory::GetInstance()->GetObject(s));
-    }
-}
-TBlackJackSettings::TBlackJackSettings(size_t bet, size_t countDeck,
-                                       std::vector<std::string> players)
-    : Bet(bet), ModeDeck(countDeck), PlayersStr(players) {
-    for (auto s : players) {
-        Players.push_back(TStrategyFactory::GetInstance()->GetObject(s));
-    }
-    ModeGame = players.size() == 2 ? "detailed" : "tournament";
+TConfig::TConfig(size_t bet, size_t bank, std::vector<std::string> players,
+                 std::string modeGame, size_t countDeck = 0)
+    : bet(bet), bank(bank), players(players), countDeck(countDeck),
+      modeGame(modeGame){};
+
+TConfig::TConfig(size_t bet, size_t bank, std::vector<std::string> players,
+                 size_t countDeck = 0)
+    : bet(bet), bank(bank), players(players), countDeck(countDeck) {
+    modeGame = players.size() == 2 ? "detailed" : "fast";
 };
 
-const int TBlackJackSettings::GetModeDeck() const { return ModeDeck; }
-const std::string TBlackJackSettings::GetModeGame() const { return ModeGame; }
+TConfig::TConfig(int argc, char **argv){
+    // program_options parser
+};
+
+TBlackJackSettings::TBlackJackSettings(TConfig config)
+    : ModeGame(config.modeGame), Bet(config.bet), StartBank(config.bank),
+      ModeDeck(config.countDeck), PlayersStr(config.players){};
+const std::string TBlackJackSettings::GetModeGame() const {
+    return ModeGame;
+}
 const std::vector<std::string> TBlackJackSettings::GetPlayers() const {
     return PlayersStr;
+}
+const int TBlackJackSettings::GetModeDeck() const {
+    return ModeDeck;
 }

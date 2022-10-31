@@ -1,28 +1,28 @@
 #pragma once
 
-#include "Strategy.hpp"
+#include "BlackJackSettings.hpp"
+#include "Player.hpp"
 
 #include <iostream>
 #include <list>
 #include <string>
 #include <vector>
 
-
-
 class TBlackJack {
   public:
-    TBlackJack(int CountArg, char* args);
-    void CreateDeck(int ModeDeck);
-    int StartGame();
+    TBlackJack(TConfig);
+    // int StartGame();??
 
-    const int TakeCard();
+    const int GetCard(bool visible);
     const int GetSizeDeck() const;
-    const std::list<int> TakeVisibleCards() const;
+    const std::vector<int> GetVisibleCards() const;
 
   private:
-    std::vector<int> AllVisibleCards;
+    std::vector<int> AllVisibleCards = {};
     int CurrentSizeDeck;
     std::list<int> CurrentDeck;
-
+    std::vector<TPlayer> Players;
     TBlackJackSettings Settings;
+
+    void CreateDeck(int ModeDeck);
 };

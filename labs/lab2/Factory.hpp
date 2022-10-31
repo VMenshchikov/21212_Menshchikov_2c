@@ -15,8 +15,6 @@ class TStrategyFactory {
     // Removing a strategy from a factory
     bool UnregistredStrategy(std::string NamStrategy);
 
-    //TStrategy *CreateStrategy(std::string NameStrategy);
-
     static TStrategyFactory *GetInstance();
 
     TStrategy* GetObject(std::string objKey) {};
