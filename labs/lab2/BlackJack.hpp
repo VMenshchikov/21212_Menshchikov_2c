@@ -8,10 +8,16 @@
 #include <string>
 #include <vector>
 
+class TPlayer;
+
 class TBlackJack {
   public:
     TBlackJack(TConfig);
-    // int StartGame();??
+    void Game() {
+        StartGame();
+        Play();
+        Results();
+    }
 
     const int GetCard(bool visible);
     const int GetSizeDeck() const;
@@ -25,4 +31,8 @@ class TBlackJack {
     TBlackJackSettings Settings;
 
     void CreateDeck(int ModeDeck);
+
+    void StartGame();
+    void Play();
+    void Results();
 };

@@ -5,7 +5,7 @@
 
 TPlayer::TPlayer(std::string StrategyName) {
     Strategy = (TStrategyFactory::GetInstance()->GetObject(StrategyName));
-    Visible = StrategyName == "Diler" ? false : true;
+    Visible = StrategyName != "Diler";
 }
 
 TBlackJack::TBlackJack(TConfig config) : Settings(TBlackJackSettings(config)) {
@@ -14,7 +14,6 @@ TBlackJack::TBlackJack(TConfig config) : Settings(TBlackJackSettings(config)) {
 
     CreateDeck(Settings.GetModeDeck());
 
-    Players.push_back(TPlayer("Diler"));
     for (auto i : Settings.GetPlayers()) {
         Players.push_back(TPlayer(i));
     }
@@ -23,10 +22,9 @@ TBlackJack::TBlackJack(TConfig config) : Settings(TBlackJackSettings(config)) {
 void TBlackJack::CreateDeck(int ModeDeck) {
     if (ModeDeck) {
         for (int deck = 0; deck < ModeDeck; ++deck) {
-            for (int i = 2; i <= 11; ++i) {
-                for (int j = 0; j < 4; j++) {
-                    CurrentDeck.push_back(i);
-                }
+            for (int j = 0; j < 4; j++) {
+                CurrentDeck.insert(CurrentDeck.begin(), {2, 3, 4, 5, 6, 7, 8, 9,
+                                                         10, 10, 10, 10, 11});
             }
         }
     }
@@ -54,4 +52,29 @@ const int TBlackJack::GetSizeDeck() const { return CurrentSizeDeck; }
 
 const std::vector<int> TBlackJack::GetVisibleCards() const {
     return AllVisibleCards;
+}
+
+void TBlackJack::StartGame() {
+    for (auto i : Players) {
+        auto Hands = i.GetHands();
+        for (int j = 0; j < 2; ++j) {
+            Hands[0].MyCards.push_back(GetCard(i.GetVisible()));
+            Hands[0].MySum += Hands[0].MyCards.back();
+        }
+    }
+}
+
+void TBlackJack::Play() {
+    for (auto i : Players) {
+        i.MakeMove(*this);
+    };
+}
+
+void TBlackJack::Results() {
+    int DilerScore = Players.end()->GetSum(0);
+    for (auto i = Players.begin(); i != Players.end()--; ++i) {
+        auto Hands = i->GetHands();
+        i->ResultPart(Hands[0], DilerScore);
+        i->ResultPart(Hands[1], DilerScore);
+    }
 }

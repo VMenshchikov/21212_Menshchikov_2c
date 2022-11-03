@@ -5,8 +5,6 @@
 #include <vector>
 
 struct TConfig {
-
-    //--configs=<dirname>                           //??
     //--bank={bank_size, bet_size}                  //always
     size_t bet;
     size_t bank;
@@ -40,7 +38,7 @@ class TBlackJackSettings {
     std::string ModeGame;
 
     // all participating strategies
-    // the first is always the dealer?
+    // diler always last "Player"
     std::vector<std::string> PlayersStr;
 
     // 0 -- simple -- rand(10) + 1

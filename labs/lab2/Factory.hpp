@@ -17,7 +17,7 @@ class TStrategyFactory {
 
     static TStrategyFactory *GetInstance();
 
-    TStrategy* GetObject(std::string objKey) {};
+    TStrategy* GetObject(std::string objKey);
 
   private:
     typedef std::map<std::string, CreateStrategyCallBack> CallbackMap;

@@ -1,6 +1,11 @@
 #pragma once
 
+#include <vector>
+
+#include "PlayerHand.hpp"
+#include "EnumAction.hpp"
+
 class TStrategy {
   public:
-    virtual bool SelectAction() = 0;
+    virtual EAction SelectAction(const THand& hand) = 0;
 };

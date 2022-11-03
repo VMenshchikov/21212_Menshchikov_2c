@@ -1,10 +1,35 @@
 #pragma once
 #include "BlackJack.hpp"
 #include "PlayerHand.hpp"
+#include <vector>
+
+class TBlackJack;
 
 class TPlayer {
   public:
-    bool ResultPart(THand &hand, int DilerScore);
+    bool ResultPart(THand& hand, int DilerScore);
+    const int GetSum(bool hand) const;
+    const bool GetVisible() const;
+    const std::vector<THand> GetHands() const;
+    void MakeMove(TBlackJack &table);
+    TPlayer(std::string StrategyName);
+
+  private:
+    TStrategy *Strategy;
+
+    // before split DoubleDeck == true and create second hand
+    // true - all card is visible
+    // false - only first card
+    bool Visible;
+
+    std::vector<THand> Hands{THand()};
+
+    int MyBank;
+
+    bool Victory(THand &hand);
+    bool Defeat(THand &hand);
+
+    // false if score > 21
     bool CheckStatus(THand &hand);
 
     // Take anouther card
@@ -23,23 +48,5 @@ class TPlayer {
     // Forfeit half the bet and end the hand immediately.
     bool Surrender(THand &hand);
 
-    TPlayer(std::string StrategyName);
-
-  private:
-    TStrategy *Strategy;
-
-    // before split DoubleDeck == true and create second hand
-    bool DoubleDeck = false;
-
-    // true - all card is visible
-    // false - only first card
-    bool Visible;
-
-    THand FirstHand;
-    THand SecondHand;
-
-    int MyBank;
-
-    bool Victory(THand &hand);
-    bool Defeat(THand &hand);
+    void MoveHand(THand &hand, TBlackJack &table);
 };

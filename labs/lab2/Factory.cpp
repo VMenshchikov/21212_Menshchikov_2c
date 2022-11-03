@@ -7,7 +7,8 @@
 
 bool TStrategyFactory::RegisterStrategy(std::string NameStrategy,
                                         CreateStrategyCallBack Create) {
-    GetInstance()->callbacks.insert({NameStrategy, Create});
+    auto ret = GetInstance()->callbacks.insert({NameStrategy, Create});
+    return ret.second;
 }
 
 bool TStrategyFactory::UnregistredStrategy(std::string NameStrategy) {
