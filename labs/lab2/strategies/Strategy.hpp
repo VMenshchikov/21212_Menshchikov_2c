@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "PlayerHand.hpp"
-#include "EnumAction.hpp"
+#include "../BlackJack/PlayerHand.hpp"
+#include "../BlackJack/EnumAction.hpp"
 
 class TStrategy {
   public:

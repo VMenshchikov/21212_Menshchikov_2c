@@ -1,6 +1,6 @@
 #include "BlackJackSettings.hpp"
-#include "Factory.hpp"
-#include "boost/program_options.hpp"
+#include "../Factory/Factory.hpp"
+#include <boost/program_options.hpp>
 
 TConfig::TConfig(size_t bet, size_t bank, std::vector<std::string> players,
                  std::string modeGame, size_t countDeck)

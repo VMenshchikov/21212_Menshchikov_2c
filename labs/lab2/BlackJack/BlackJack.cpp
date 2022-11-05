@@ -1,6 +1,6 @@
 #include "BlackJack.hpp"
 #include "BlackJackSettings.hpp"
-#include "Factory.hpp"
+#include "../Factory/Factory.hpp"
 //{ TabWidth: 4, IndentWidth: 4, ColumnLimit: 80 }
 
 TPlayer::TPlayer(std::string StrategyName) {
