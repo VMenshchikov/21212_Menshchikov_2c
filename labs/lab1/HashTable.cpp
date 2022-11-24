@@ -1,4 +1,5 @@
 #include "HashTable.h"
+
 #include <cassert>
 #include <iostream>
 
@@ -11,9 +12,7 @@ bool operator==(const TValue &a, const TValue &b) {
 
 HashTable::TList::TList(const Key &k, const TValue &value) : k(k), value(value){};
 
-HashTable::HashTable() : iSize(START_SIZE), iCount(0) {
-    TTable = new std::list<TList>[iSize];
-}
+HashTable::HashTable() : HashTable(START_SIZE) {}
 
 HashTable::HashTable(size_t iSize) : iSize(iSize), iCount(0) {
     TTable = new std::list<TList>[iSize];
@@ -50,11 +49,7 @@ HashTable &HashTable::operator=(const HashTable &b) {
     }
     iCount = b.iCount;
     iSize = b.iSize;
-    if (TTable != nullptr) {
         clear();
-    } else {
-        TTable = new std::list<TList>[iSize];
-    }
     std::copy(b.TTable, b.TTable + iSize, TTable);
     return *this;
 }
@@ -105,7 +100,7 @@ bool HashTable::insert(const Key &k, const TValue &v) {
 
 bool HashTable::contains(const Key &k) const {
     auto hash = GetHash(k);
-    if (TTable[hash].empty()) {
+    if (!TTable[hash].empty()) {
         for (auto i = TTable[hash].begin(); i != TTable[hash].end(); i++) {
             if (i->k == k) {
                 return true;
@@ -150,8 +145,7 @@ TValue &HashTable::at(const Key &k) {
             }
         }
     }
-    std::cerr << "invalid index" << std::endl;
-    throw(-1);
+    throw(std::invalid_argument("invalid index"));
 }
 
 const TValue &HashTable::at(const Key &k) const {
@@ -164,15 +158,11 @@ const TValue &HashTable::at(const Key &k) const {
             }
         }
     }
-    std::cerr << "invalid index" << std::endl;
-    throw(-1);
+    std::cerr << "invalid index" << std::endl;  //???
+    throw(std::invalid_argument("invalid index"));
 }
 
-size_t HashTable::size() const { return HashTable::iSize; }
 
-size_t HashTable::count() const { return HashTable::iCount; }
-
-bool HashTable::empty() const { return !(HashTable::iCount); }
 
 bool operator==(const HashTable::TList &a, const HashTable::TList &b) {
     return ((a.k == b.k) && (a.value == b.value)) ? true : false;

@@ -3,9 +3,6 @@
 #include <list>
 #include <string>
 
-#define START_SIZE 16
-#define RECREATION_COEF 0.5f
-
 typedef std::string Key;
 
 struct TValue {
@@ -52,14 +49,19 @@ class HashTable {
     TValue &at(const Key &k);
     const TValue &at(const Key &k) const;
 
-    size_t size() const;
-    size_t count() const;
-    bool empty() const;
+    size_t size() const { return iSize; }
+    size_t count() const { return iCount; }
+    bool empty() const { return !(iCount); }
+    size_t GetStartSize() const {return START_SIZE;}
+    double GetCoef() const {return RECREATION_COEF;}
 
     friend bool operator==(const HashTable &a, const HashTable &b);
     friend bool operator!=(const HashTable &a, const HashTable &b);
 
   private:
+    static constexpr size_t START_SIZE = 16 ;
+    static constexpr double RECREATION_COEF = 0.5l ;
+
     struct TList {
         Key k = "";
         TValue value;
@@ -72,16 +74,17 @@ class HashTable {
 
     std::list<TList> *TTable = nullptr;
     size_t iSize = START_SIZE;
-    //занятые ячейки таблицы(не кол-во элементов в ней)
+    // занятые ячейки таблицы(не кол-во элементов в ней)
     size_t iCount = 0;
 
     size_t GetHash(const Key &k) const;
-    //Пересобирает таблицу, при count > RECREATION_COEF
+    // Пересобирает таблицу, при count > RECREATION_COEF
     void ReCreation();
-    //дублирующие методы для избежания повторного подсчета хеша
+    // дублирующие методы для избежания повторного подсчета хеша
     bool contains(const Key &k, size_t hash) const;
     bool erase(const Key &k, const size_t hash);
-    //обертка erase
+    // обертка erase
     bool del(const Key &k, const size_t hash);
-    friend bool operator==(const HashTable::TList &a, const HashTable::TList &b);
+    friend bool operator==(const HashTable::TList &a,
+                           const HashTable::TList &b);
 };
