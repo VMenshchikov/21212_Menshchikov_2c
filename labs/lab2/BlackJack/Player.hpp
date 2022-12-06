@@ -2,17 +2,22 @@
 #include "BlackJack.hpp"
 #include "PlayerHand.hpp"
 #include <vector>
+#include <string>
+#include "../strategies/Strategy.hpp"
+#include "../Factory/Factory.hpp"
 
 class TBlackJack;
+class TStrategy;
 
 class TPlayer {
   public:
     bool ResultPart(THand& hand, int DilerScore);
     const int GetSum(bool hand) const;
+    size_t &GetBank();
     const bool GetVisible() const;
-    const std::vector<THand> GetHands() const;
+    std::vector<THand>& GetHands();
     void MakeMove(TBlackJack &table);
-    TPlayer(std::string StrategyName);
+    TPlayer(std::string StrategyName, size_t bankSize);
 
   private:
     TStrategy *Strategy;
@@ -22,9 +27,9 @@ class TPlayer {
     // false - only first card
     bool Visible;
 
-    std::vector<THand> Hands{THand()};
+    std::vector<THand> Hands;
 
-    int MyBank;
+    size_t MyBank;
 
     bool Victory(THand &hand);
     bool Defeat(THand &hand);

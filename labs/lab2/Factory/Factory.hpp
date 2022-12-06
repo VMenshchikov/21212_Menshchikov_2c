@@ -1,31 +1,46 @@
 #pragma once
 
-#include "../strategies/Strategy.hpp"
-#include <map>
 #include <string>
+#include <map>
+#include <iostream>
+#include <functional>
 
-class TStrategyFactory {
+template <class KeyType, class ReturnType, class ReturnObjectCreator>
+class TFactory {
   public:
-    typedef TStrategy *(*CreateStrategyCallBack)();
+    // Registering ObjCreator
+    static bool Register(KeyType Key, ReturnObjectCreator Creator) {
+        auto ret = GetInstance()->FMap.insert({Key, Creator});
+        return ret.second;
+    }
 
-    // Registering a strategy
-    static bool RegisterStrategy(std::string NameStrategy,
-                                 CreateStrategyCallBack Create);
+    // Removing ObjCreator from a factory
+    bool Unregistred(KeyType Key) {
+        return GetInstance()->FMap.erase(Key);
+    }
 
-    // Removing a strategy from a factory
-    bool UnregistredStrategy(std::string NamStrategy);
+    static TFactory<KeyType, ReturnType, ReturnObjectCreator> *GetInstance() {
+        if (instance == nullptr) {
+            instance = new TFactory<KeyType, ReturnType, ReturnObjectCreator>;
+        }
+        return instance;
+    }
 
-    static TStrategyFactory *GetInstance();
-
-    TStrategy* GetObject(std::string objKey);
+    ReturnType GetObject(KeyType Key) { return FMap[Key](); }
 
   private:
-    typedef std::map<std::string, CreateStrategyCallBack> CallbackMap;
-    CallbackMap callbacks;
+    typedef std::map<KeyType, ReturnObjectCreator> FactoryMap;
+    FactoryMap FMap;
 
-    static TStrategyFactory *instance;
+    static TFactory<KeyType, ReturnType, ReturnObjectCreator> *instance;
 
-    TStrategyFactory &operator=(TStrategyFactory &b) = delete;
-    TStrategyFactory();
-    TStrategyFactory(TStrategyFactory &b) = delete;
+    TFactory<KeyType, ReturnType, ReturnObjectCreator>& operator=(TFactory &b) = delete;
+    TFactory<KeyType, ReturnType, ReturnObjectCreator>(){};
+    TFactory<KeyType, ReturnType, ReturnObjectCreator>(TFactory<KeyType, ReturnType, ReturnObjectCreator> &b) = delete;
 };
+// Init static value before using :
+// Fucking shit ;}
+//
+template <class KeyType, class ReturnType, class ReturnObjectCreator>
+TFactory<KeyType, ReturnType, ReturnObjectCreator>*
+TFactory<KeyType, ReturnType, ReturnObjectCreator>::instance = nullptr;

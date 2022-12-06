@@ -2,10 +2,9 @@
 #include "../../BlackJack/EnumAction.hpp"
 
 // реализация
-EAction TDiler::SelectAction(const THand &hand) { return EAction::eStand; };
-
-namespace {
-TStrategy *Create() { return new TDiler; }
-const bool reg =
-    TStrategyFactory::GetInstance()->RegisterStrategy("Diler", Create);
-} 
+EAction TDiler::SelectAction(const THand &hand, const TBlackJack &table) {
+    if (hand.MySum < 17) {
+        return EAction::eHit;
+    };
+    return EAction::eStand;
+};

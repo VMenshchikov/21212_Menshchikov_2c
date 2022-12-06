@@ -4,28 +4,25 @@
 #include "../../Factory/Factory.hpp"
 #include "../Strategy.hpp"
 #include <functional>
-#include <iostream>
 
 class TBlackJack;
 
-class TDiler : public TStrategy {
+class TPlayerS : public TStrategy {
   public:
-    TDiler() = default;
+    TPlayerS() = default;
     EAction SelectAction(const THand &hand, const TBlackJack &table);
 };
 
 namespace {
-TStrategy *Create() { return new TDiler; }
+TStrategy *Create() { return new TPlayerS; }
 
-const bool res = TFactory<std::string, TStrategy *,
+bool Print() {
+    bool res = TFactory<std::string, TStrategy *,
                         std::function<TStrategy *()>>::GetInstance()
-                   ->Register("Diler", Create);
-
-bool Registration() {
-    
-    std::cout << "Diler is" << (res == true ? " " : " not ")
+                   ->Register("Player", Create);
+    std::cout << "Player is" << (res == true ? " " : " not ")
               << "registred in factory" << std::endl;
     return res;
 }
-const bool reg = Registration();
-}
+const bool reg = Print();
+} 

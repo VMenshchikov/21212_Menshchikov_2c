@@ -1,2 +1,2 @@
 #pragma once
-enum EAction { eHit, eStand, eDoubleDoun, eSplit, eSurrender };
+enum class EAction { eHit, eStand, eDoubleDoun, eSplit, eSurrender };
