@@ -50,8 +50,10 @@ class Printer {
     }
     static void PrintPlayingPlayer(size_t num,
                                    const std::vector<std::string> &player) {
-        std::cout << std::endl
-                  << "Playing: " << player[num] << "(" << num + 1 << ")"
+        std::cout << "*Playing: " << player[num] << "(" << num + 1 << ")"
                   << std::endl;
+    }
+    static void PrintSeparationPlayers(){
+        std::cout << "-------------------------" <<std::endl;
     }
 };

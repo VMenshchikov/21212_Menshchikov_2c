@@ -3,11 +3,8 @@
 #include "BlackJackSettings.hpp"
 #include "Printer.hpp"
 
-
 TBlackJack::TBlackJack(TConfig config) : Settings(TBlackJackSettings(config)) {
-    CurrentSizeDeck = Settings.ModeDeck == 0 ? -1 : Settings.ModeDeck * 52;
-
-    CreateDeck(Settings.ModeDeck);
+    CreateDeck();
     int countDiler = 0;
     for (auto i : Settings.PlayersStr) {
         if (i == "Diler") {
@@ -21,15 +18,18 @@ TBlackJack::TBlackJack(TConfig config) : Settings(TBlackJackSettings(config)) {
     };
 }
 
-void TBlackJack::CreateDeck(int ModeDeck) {
-    if (ModeDeck) {
-        for (int deck = 0; deck < ModeDeck; ++deck) {
+void TBlackJack::CreateDeck() {
+    if (Settings.ModeDeck) {
+        for (int deck = 0; deck < Settings.ModeDeck; ++deck) {
             for (int j = 0; j < 4; j++) {
                 CurrentDeck.insert(CurrentDeck.begin(), {2, 3, 4, 5, 6, 7, 8, 9,
                                                          10, 10, 10, 10, 11});
             }
         }
+        CurrentSizeDeck = CurrentDeck.size();
+        return;
     }
+    CurrentSizeDeck = -1;
 }
 
 int TBlackJack::GetCard(bool visible) {
@@ -37,6 +37,9 @@ int TBlackJack::GetCard(bool visible) {
     if (CurrentSizeDeck == -1) {
         tmp = rand() % 10 + 2;
     } else {
+        if (CurrentSizeDeck < 0.3 * Settings.ModeDeck * 52) {
+            ReplenishmentDeck();
+        }
         auto iter = CurrentDeck.begin();
         for (int i = 0; i < rand() % CurrentSizeDeck; ++i, ++iter)
             ;
@@ -49,9 +52,6 @@ int TBlackJack::GetCard(bool visible) {
     };
     return tmp;
 }
-
-
-
 
 void TBlackJack::StartGame() {
     if (Settings.ModeGame == "detailed") {
@@ -102,26 +102,25 @@ void TBlackJack::Results() {
 }
 
 void TBlackJack::PrintResult() {
-    std::vector<std::pair<int, int>> Winner = {
-        {1, Players.begin()->GetBank()}}; // numPlayer, maxBank
-    size_t playersNum = 1;
-    for (auto i = Players.begin(); i != Players.end() - 1; ++i) {
-        std::cout << playersNum
-                  << ") Name: " << Settings.PlayersStr[playersNum - 1]
-                  << " | Bank: " << i->GetBank() << std::endl;
-        if (i->GetBank() == Winner.begin()->second && playersNum > 1) {
-            Winner.push_back({playersNum, i->GetBank()});
+    std::vector<std::pair<int, int>> Winner = {{0, 0}}; // numPlayer, maxBank
+    // size_t playersNum = 1;
+    for (size_t playersNum = 0; playersNum < Players.size() - 1; ++playersNum) {
+        std::cout << playersNum + 1
+                  << ") Name: " << Settings.PlayersStr[playersNum]
+                  << " | Bank: " << Players[playersNum].GetBank() << std::endl;
+        if (Players[playersNum].GetBank() == Winner.begin()->second) {
+            Winner.push_back({playersNum, Players[playersNum].GetBank()});
 
         } else {
-            if (i->GetBank() < Winner.begin()->second) {
+            if (Players[playersNum].GetBank() > Winner.back().second) {
                 Winner.clear();
-                Winner.push_back({playersNum, i->GetBank()});
+                Winner.push_back({playersNum, Players[playersNum].GetBank()});
             }
         }
-        playersNum++;
     }
     std::cout << std::endl << "Winner(s): ";
-    for (auto i : Winner) {
-        std::cout << Settings.PlayersStr[i.first];
+    for (int i = 0; i < Winner.size(); i++) {
+        std::cout << Settings.PlayersStr[Winner[i].first] << " ";
     }
+    std::cout << std::endl;
 }

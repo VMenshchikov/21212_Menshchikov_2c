@@ -2,6 +2,7 @@
 
 #include "BlackJackSettings.hpp"
 #include "Player.hpp"
+#include "Printer.hpp"
 
 #include <iostream> //??
 #include <list>
@@ -23,11 +24,19 @@ class TBlackJack {
     int GetCountPart() { return Settings.CountPart; }
 
     void Game(size_t count) { // for tournament
+        Printer::PrintSeparationPlayers();
+
         for (; count; --count) {
             StartGame();
+            Printer::PrintSeparationPlayers();
+
             Play();
+            Printer::PrintSeparationPlayers();
+
             Results();
         }
+        Printer::PrintSeparationPlayers();
+
         PrintResult();
     }
 
@@ -39,7 +48,8 @@ class TBlackJack {
     int DilerCard;
     const TBlackJackSettings Settings;
 
-    void CreateDeck(int ModeDeck);
+    void CreateDeck();
+    void ReplenishmentDeck() { CreateDeck(); };
 
     void StartGame();
     void Play();
