@@ -8,7 +8,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # QtCreator supports the following variables for Android, which are identical to qmake Android variables.
@@ -24,7 +24,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Widgets UiTools REQUIRED)
+#find_package(Qt6 REQUIRED COMPONENTS UiTools)
 
 if(ANDROID)
   add_library(BlackJack SHARED
@@ -32,6 +33,14 @@ if(ANDROID)
     startwindow.cpp
     startwindow.h
     startwindow.ui
+    statistic.ui
+    leaders.txt
+    gamewindow.cpp
+    gamewindow.h
+    gamewindow.ui
+    Factory/cardsFactory.cpp
+    Factory/Factory.hpp
+
   )
 else()
   add_executable(BlackJack
@@ -39,7 +48,15 @@ else()
     startwindow.cpp
     startwindow.h
     startwindow.ui
+    leaders.txt
+    gamewindow.ui
+    gamewindow.h
+    gamewindow.cpp
+    Factory/cardsFactory.cpp
+    Factory/Factory.hpp
   )
 endif()
+
+#target_link_libraries(BlackJack PRIVATE Qt6::UiTools)
 
 target_link_libraries(BlackJack PRIVATE Qt5::Widgets)
