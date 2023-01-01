@@ -38,9 +38,11 @@ class TFactory {
     TFactory<KeyType, ReturnType, ReturnObjectCreator>(){};
     TFactory<KeyType, ReturnType, ReturnObjectCreator>(TFactory<KeyType, ReturnType, ReturnObjectCreator> &b) = delete;
 };
+
 // Init static value before using :
-// Fucking shit ;}
-//
+
 template <class KeyType, class ReturnType, class ReturnObjectCreator>
 TFactory<KeyType, ReturnType, ReturnObjectCreator>*
+
 TFactory<KeyType, ReturnType, ReturnObjectCreator>::instance = nullptr;
+

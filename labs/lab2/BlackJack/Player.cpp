@@ -1,12 +1,16 @@
 #include "Player.hpp"
 #include "../Factory/Factory.hpp"
+#include "../strategies/Strategy.hpp"
 #include "Printer.hpp"
 #include <functional>
+#include <memory>
 
 TPlayer::TPlayer(std::string StrategyName, size_t bankSize) {
-    Strategy = TFactory<std::string, TStrategy *,
-                        std::function<TStrategy *()>>::GetInstance()
-                   ->GetObject(StrategyName);
+    ptr = std::unique_ptr<TStrategy>(
+        TFactory<std::string, TStrategy *,
+                 std::function<TStrategy *()>>::GetInstance()
+            ->GetObject(StrategyName));
+    Strategy = ptr.get();
     Visible = StrategyName != "Diler";
     MyBank = bankSize;
     Hands.reserve(2);
@@ -93,8 +97,9 @@ bool TPlayer::ResultPart(THand &hand, int DilerScore) {
     if (!hand.MyCards.size()) {
         return false;
     }
-    return ((hand.MySum > DilerScore) && hand.InGame) ? Victory(hand)
-                                                      : Defeat(hand);
+    if (!hand.InGame) return Defeat(hand);
+    if (DilerScore > 21) return Victory(hand);
+    return (hand.MySum > DilerScore) ? Victory(hand) : Defeat(hand);
 }
 
 bool TPlayer::CheckStatus(THand &hand) {

@@ -11,4 +11,5 @@ class TBlackJack;
 class TStrategy {
   public:
     virtual EAction SelectAction(const THand& hand, const TBlackJack& table) = 0;
+    virtual ~TStrategy() = default;
 };

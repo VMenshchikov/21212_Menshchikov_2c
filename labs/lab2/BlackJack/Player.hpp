@@ -1,10 +1,13 @@
 #pragma once
+
+#include "../strategies/Strategy.hpp"
 #include "BlackJack.hpp"
 #include "PlayerHand.hpp"
 #include <vector>
 #include <string>
-#include "../strategies/Strategy.hpp"
+#include <memory>
 #include "../Factory/Factory.hpp"
+
 
 class TBlackJack;
 class TStrategy;
@@ -20,6 +23,7 @@ class TPlayer {
     TPlayer(std::string StrategyName, size_t bankSize);
 
   private:
+    std::unique_ptr<TStrategy> ptr;
     TStrategy *Strategy;
 
     // before split DoubleDeck == true and create second hand

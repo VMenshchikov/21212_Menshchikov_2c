@@ -3,6 +3,7 @@
 // #include "../strategies/Strategy.hpp"
 #include <string>
 #include <vector>
+#include "../Factory/Factory.hpp"
 
 struct TConfig {
     //--bank={bank_size, bet_size}                  //always

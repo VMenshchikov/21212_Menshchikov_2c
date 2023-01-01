@@ -2,6 +2,7 @@
 
 #include "PlayerHand.hpp"
 #include <iostream>
+// #include <Q
 
 class Printer {
   public:
@@ -41,7 +42,7 @@ class Printer {
                   << MyBank << std::endl;
     }
     static void PrintPlaingHand(int numHand) {
-        std::cout << "\n\nPlaying hand " << numHand << "." << std::endl;
+        std::cout << "\nPlaying hand " << numHand << "." << std::endl;
     }
 
     // BlacjJack.cpp
@@ -53,7 +54,29 @@ class Printer {
         std::cout << "*Playing: " << player[num] << "(" << num + 1 << ")"
                   << std::endl;
     }
-    static void PrintSeparationPlayers(){
-        std::cout << "-------------------------" <<std::endl;
+    static void PrintSeparationPlayers() {
+        std::cout << "-------------------------" << std::endl;
+    }
+
+    static void PrintDillerCards(std::vector<int> allDellerCards) {
+        std::cout << "Diller cards: ";
+        for (auto i : allDellerCards) {
+            std::cout << i << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    static void PrintPlayerResult(std::string name, size_t cash, int number) {
+        std::cout << number << ") Name: " << name << " | Bank: " << cash
+                  << std::endl;
+    }
+
+    static void PrintWinner(std::vector<std::string> winners){
+        std::cout << "\nWinner(s): ";
+        for (auto i: winners){
+            std::cout << i << " ";
+        }
+        std::cout << std::endl;
     }
 };
+

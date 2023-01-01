@@ -4,7 +4,6 @@
 #include "Player.hpp"
 #include "Printer.hpp"
 
-#include <iostream> //??
 #include <list>
 #include <string>
 #include <vector>
@@ -46,6 +45,7 @@ class TBlackJack {
     std::list<int> CurrentDeck;
     std::vector<TPlayer> Players;
     int DilerCard;
+    int hideDillerCard; //?
     const TBlackJackSettings Settings;
 
     void CreateDeck();

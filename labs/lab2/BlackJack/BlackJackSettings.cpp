@@ -11,19 +11,20 @@ TConfig::TConfig(size_t srandPar, size_t bet, size_t bank,
     srand(srandPar == 0 ? time(0) : srandPar);
 };
 
-TConfig::TConfig(int argc, char **argv) { //смесь хабра и чего-та английского
+TConfig::TConfig(int argc, char **argv) { // смесь хабра и чего-тo английского
     // program_options parser
     using namespace boost::program_options;
     options_description desc("General options");
     std::string task_type;
     desc.add_options()
-        ("Help,h", "Show help")
-        ("Mode,M", value<std::string>(),"ModeGame(detailed/tournament)")
-        ("CountPart,C", value<size_t>(), "Count parts in game")
-        ("Player,P", value<std::vector<std::string>>(),"Select strategy")
-        ("CountDeck,D", value<size_t>(), "Select count decks")
-        ("Bank,B", value<size_t>(), "Money")
-        ("Bet,b", value<size_t>(), "Size bet");
+    ("Help,h", "Show help")
+    ("Mode,M", value<std::string>(),"ModeGame(detailed/tournament)")
+    ("CountPart,C", value<size_t>(), "Count parts in game")
+    ("Player,P", value<std::vector<std::string>>(), "Select strategy")
+    ("CountDeck,D", value<size_t>(), "Select count decks")
+    ("Bank,B", value<size_t>(), "Money")
+    ("Bet,b", value<size_t>(),"Size bet")
+    ("Time,t", value<int>(),"Seed for rand()");
 
     variables_map vm;
     parsed_options parsed = command_line_parser(argc, argv)
@@ -36,17 +37,18 @@ TConfig::TConfig(int argc, char **argv) { //смесь хабра и чего-т
     if (vm.count("Help")) {
         std::cout << desc << std::endl;
         std::cout << "Min args: Player, Bank and Bet" << std::endl;
+        exit(0);
     } else {
         if (vm.count("Bet") && vm.count("Bank") && vm.count("Player")) {
             bet = vm["Bet"].as<size_t>();
             bank = vm["Bank"].as<size_t>();
             players = vm["Player"].as<std::vector<std::string>>();
-            if(!vm.count("Mode")){
+            if (!vm.count("Mode")) {
                 modeGame = "detailed";
             } else {
                 modeGame = vm["Mode"].as<std::string>();
             }
-            if(vm.count("CountDeck")) {
+            if (vm.count("CountDeck")) {
                 countDeck = vm["CountDeck"].as<size_t>();
             } else {
                 if (modeGame == "detailed") {
@@ -55,7 +57,7 @@ TConfig::TConfig(int argc, char **argv) { //смесь хабра и чего-т
                     countDeck = 5;
                 }
             }
-            if(vm.count("CountPart")) {
+            if (vm.count("CountPart")) {
                 countPart = vm["CountPart"].as<size_t>();
             } else {
                 if (modeGame == "detailed") {
@@ -70,7 +72,14 @@ TConfig::TConfig(int argc, char **argv) { //смесь хабра и чего-т
             throw(std::invalid_argument("bad argv"));
         }
     }
-    std::srand(time(0));
+    if (vm.count("Time")) {
+        std::srand(vm["Time"].as<int>());
+    } else {
+        std::srand(time(0));
+    }
+    //add Diller
+        this->players.push_back("Diler");
+
 };
 
 TBlackJackSettings::TBlackJackSettings(TConfig config)
