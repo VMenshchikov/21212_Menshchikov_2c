@@ -1,5 +1,6 @@
 #include "HashTable.h"
 
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 
@@ -10,7 +11,10 @@ bool operator==(const TValue &a, const TValue &b) {
     return (a.age == b.age && a.weight == b.weight);
 }
 
-HashTable::TList::TList(const Key &k, const TValue &value) : k(k), value(value){};
+HashTable::TList::TList(const Key &k, const TValue &value)
+    : k(k), value(value){};
+
+HashTable::TList::TList(const Key &k) : k(k), value(TValue()){};
 
 HashTable::HashTable() : HashTable(START_SIZE) {}
 
@@ -29,7 +33,8 @@ HashTable::HashTable(const HashTable &b) : iSize(b.iSize), iCount(b.iCount) {
 }
 
 HashTable::HashTable(HashTable &&b)
-    : iSize(b.iSize), iCount(b.iCount), TTable(b.TTable) {
+    : iSize(b.iSize), iCount(b.iCount), TTable(std::move(b.TTable)) {
+
     b.iSize = 0;
     b.iCount = 0;
     b.TTable = nullptr;
@@ -37,9 +42,7 @@ HashTable::HashTable(HashTable &&b)
 
 void HashTable::swap(HashTable &b) {
     HashTable temp = std::move(*this);
-    assert(this->TTable == nullptr);
     *this = std::move(b);
-    assert(this->TTable != nullptr);
     b = std::move(temp);
 }
 
@@ -49,18 +52,21 @@ HashTable &HashTable::operator=(const HashTable &b) {
     }
     iCount = b.iCount;
     iSize = b.iSize;
-        clear();
+    delete[] TTable;
+    TTable = new std::list<TList>[iSize];
     std::copy(b.TTable, b.TTable + iSize, TTable);
     return *this;
 }
 
 HashTable &HashTable::operator=(HashTable &&b) {
-    iSize = b.iSize;
-    iCount = b.iCount;
     if (&b == this) {
         return *this;
     }
-    TTable = std::move(b.TTable);
+    delete[] TTable;
+    iSize = b.iSize;
+    iCount = b.iCount;
+    TTable = b.TTable;
+
     b.TTable = nullptr;
     b.iSize = 0;
     b.iCount = 0;
@@ -89,6 +95,7 @@ bool HashTable::insert(const Key &k, const TValue &v) {
 
     if (iCount > iSize * RECREATION_COEF) {
         ReCreation();
+        hash = GetHash(k);
     }
 
     if (TTable[hash].empty()) {
@@ -100,22 +107,21 @@ bool HashTable::insert(const Key &k, const TValue &v) {
 
 bool HashTable::contains(const Key &k) const {
     auto hash = GetHash(k);
+
+    return contains(k, hash);
+}
+
+bool HashTable::contains(const Key &k, size_t hash) const {
     if (!TTable[hash].empty()) {
+
         for (auto i = TTable[hash].begin(); i != TTable[hash].end(); i++) {
             if (i->k == k) {
                 return true;
             }
         }
-    }
-    return false;
-}
-
-bool HashTable::contains(const Key &k, size_t hash) const {
-    if (!TTable[hash].empty()) {
-        for (auto i = TTable[hash].begin(); i != TTable[hash].end(); i++) {
-            if (i->k == k) {
-                return true;
-            }
+        if (std::find(TTable[hash].begin(), TTable[hash].end(), k) !=
+            TTable[hash].end()) {
+            return true;
         }
     }
     return false;
@@ -158,26 +164,24 @@ const TValue &HashTable::at(const Key &k) const {
             }
         }
     }
-    std::cerr << "invalid index" << std::endl;  //???
     throw(std::invalid_argument("invalid index"));
 }
 
-
-
 bool operator==(const HashTable::TList &a, const HashTable::TList &b) {
-    return ((a.k == b.k) && (a.value == b.value)) ? true : false;
+    return ((a.k == b.k) && (a.value == b.value));
 }
 
 bool operator==(const HashTable &a, const HashTable &b) {
     if (&a == &b) {
         return true;
-    } else if (a.size() != b.size()) {
+    }
+    if (a.size() != b.size()) {
         return false;
-    } else {
-        for (size_t i = 0; i < a.size(); ++i) {
-            if (a.TTable[i] != b.TTable[i]) {
-                return false;
-            }
+    }
+
+    for (size_t i = 0; i < a.capacity(); ++i) {
+        if (a.TTable[i] != b.TTable[i]) {
+            return false;
         }
     }
     return true;
@@ -192,7 +196,7 @@ size_t HashTable::GetHash(const Key &k) const {
         hash += static_cast<size_t>(k[i]) * degree;
         degree *= 3;
     }
-    hash %= this->size();
+    hash %= this->capacity();
     return hash;
 }
 
@@ -213,9 +217,8 @@ bool HashTable::del(const Key &k, const size_t hash) {
 void HashTable::ReCreation() {
     HashTable b(iSize * 2);
     for (size_t i = 0; i < iSize; ++i) {
-        auto j = TTable[i].begin();
-        for (j; j != TTable[i].end(); ++j) {
-            b.insert(j->k, j->value);
+        for (auto j : TTable[i]) {
+            b.insert(j.k, j.value);
         }
     }
     *this = std::move(b);

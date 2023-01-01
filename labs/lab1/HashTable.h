@@ -49,8 +49,8 @@ class HashTable {
     TValue &at(const Key &k);
     const TValue &at(const Key &k) const;
 
-    size_t size() const { return iSize; }
-    size_t count() const { return iCount; }
+    size_t size() const { return iCount; }
+    size_t capacity() const { return iSize; }
     bool empty() const { return !(iCount); }
     size_t GetStartSize() const {return START_SIZE;}
     double GetCoef() const {return RECREATION_COEF;}
@@ -74,7 +74,7 @@ class HashTable {
 
     std::list<TList> *TTable = nullptr;
     size_t iSize = START_SIZE;
-    // занятые ячейки таблицы(не кол-во элементов в ней)
+    // занятые ячейки таблицы(не кол-во элементов в ней)    
     size_t iCount = 0;
 
     size_t GetHash(const Key &k) const;

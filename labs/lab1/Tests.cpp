@@ -2,15 +2,24 @@
 #include <cmath>
 #include <gtest/gtest.h>
 
+TEST(AAA, BBB) {
+    HashTable h1(10);
+    HashTable h2(100500);
+    h2["aaa"] = {};
+
+    h1 = h2;
+    EXPECT_EQ(h1["aaa"], TValue());
+}
+
 TEST(Constructors, TEST_1) {
     HashTable table;
-    EXPECT_TRUE(table.empty() && table.size() == table.GetStartSize() &&
-                table.count() == 0);
+    EXPECT_TRUE(table.empty() && table.capacity() == table.GetStartSize() &&
+                table.size() == 0);
 }
 
 TEST(Constructors, TEST_2) {
     HashTable table(500);
-    EXPECT_TRUE(table.empty() && table.size() == 500);
+    EXPECT_TRUE(table.empty() && table.capacity() == 500);
 }
 
 TEST(Constructors, TEST_3) {
@@ -119,8 +128,8 @@ TEST(Functions, TEST_10) {
         val[i].age = i;
         val[i].weight = 123456;
         table.insert(array[i], val[i]);
+
     }
-    std::cout << "CurrentSize == " << table.size() << std::endl;
     EXPECT_TRUE(table["Петя"] == val[5] && table["27"] == val[17]);
 }
 
@@ -133,7 +142,6 @@ TEST(Functions, TEST_11) {
             str.push_back(rand() % 256);
         }
         table.insert(str, val);
-        std::cout << table.count() << " ";
     }
     std::cout << "CurrentSize == " << table.size() << std::endl;
 
@@ -143,7 +151,6 @@ TEST(Functions, TEST_11) {
 TEST(Functions, TEST_12) {
     HashTable table;
     table.insert("12", {12, 21});
-    std::cout<<!table.contains("21");
     EXPECT_TRUE(!table.contains("21") && table.contains("12"));
 }
 
@@ -159,7 +166,6 @@ TEST(Functions, TEST_14) {
 
     table.insert("1", TValue());
     table3.insert("12", TValue());
-    
 
     EXPECT_TRUE(table == table);
     EXPECT_FALSE(table == table2);
