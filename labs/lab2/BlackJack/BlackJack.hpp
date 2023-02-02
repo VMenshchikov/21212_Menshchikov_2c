@@ -12,15 +12,15 @@ class TPlayer;
 
 class TBlackJack {
   public:
-    TBlackJack(TConfig);
+    TBlackJack(TConfig config);
 
     int GetCard(bool visible);
     int GetDilerCard() const { return DilerCard; }
     int GetSizeDeck() const { return CurrentSizeDeck; }
-    int GetBet() const { return Settings.Bet; }
-    const std::string &GetModeGame() const { return Settings.ModeGame; }
+    int GetBet() const { return Settings.bet; }
+    const std::string &GetModeGame() const { return Settings.modeGame; }
     const std::vector<int> &GetVisibleCards() const { return AllVisibleCards; }
-    int GetCountPart() { return Settings.CountPart; }
+    int GetCountPart() { return Settings.countPart; }
 
     void Game(size_t count) { // for tournament
         Printer::PrintSeparationPlayers();
@@ -45,8 +45,7 @@ class TBlackJack {
     std::list<int> CurrentDeck;
     std::vector<TPlayer> Players;
     int DilerCard;
-    int hideDillerCard; //?
-    const TBlackJackSettings Settings;
+    const TConfig Settings;
 
     void CreateDeck();
     void ReplenishmentDeck() { CreateDeck(); };

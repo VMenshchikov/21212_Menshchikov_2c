@@ -19,7 +19,8 @@ public:
     StartWindow(QWidget *parent = nullptr);
     ~StartWindow();
 
-//private slots:
+    const gamewindow* getGameWindow() const { return game; }
+
     virtual void resizeEvent(QResizeEvent *event) override;
 
 private slots:
@@ -28,6 +29,7 @@ private slots:
     void on_StatButton_clicked();
 
 private:
+
     Ui::StartWindow *ui;
     gamewindow *game;
     QString ParserLeaders(std::ifstream& inputFile);

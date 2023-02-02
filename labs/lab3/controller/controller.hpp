@@ -1,14 +1,33 @@
 #pragma once
 
-#include "../../lab2/BlackJack/BlackJack.hpp"
+#include <QObject>
 
-class TController {
+#include "../game/BlackJack/BlackJack.hpp"
+#include "../interface/BlackJack/startwindow.h"
+
+class TController : public QObject{
+    Q_OBJECT
   public:
-    static void startGame(size_t bet, size_t bank, size_t parts);
-    static int getDilerCard();
-    static std::vector<int> getPlayerCards();
+    TController(StartWindow* w);
+    virtual ~TController();
+
+    int getDilerCard();
+
+    void connect();
+    void connectUI(TStrategy& s);
+
+  signals:
+    void uiActions(char);
+
+  public slots:
+    void startGame(size_t bet, size_t bank, size_t parts);
+    void convertToActions(THand hand);
+    void endGame();
+
 
 
   private:
-    static TBlackJack game;
-}
+    std::unique_ptr<TBlackJack> game;
+    StartWindow* w;
+
+};

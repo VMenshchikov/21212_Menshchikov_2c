@@ -15,9 +15,9 @@ class TStrategy;
 class TPlayer {
   public:
     bool ResultPart(THand& hand, int DilerScore);
-    const int GetSum(bool hand) const;
+    int GetSum(bool hand) const;
     size_t &GetBank();
-    const bool GetVisible() const;
+    bool GetVisible() const;
     std::vector<THand>& GetHands();
     void MakeMove(TBlackJack &table);
     TPlayer(std::string StrategyName, size_t bankSize);

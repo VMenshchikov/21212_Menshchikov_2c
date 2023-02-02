@@ -3,10 +3,10 @@
 #include "BlackJackSettings.hpp"
 #include "Printer.hpp"
 
-TBlackJack::TBlackJack(TConfig config) : Settings(TBlackJackSettings(config)) {
+TBlackJack::TBlackJack(TConfig config) : Settings(config) {
     CreateDeck();
     int countDiler = 0;
-    for (auto i : Settings.PlayersStr) {
+    for (auto i : Settings.playersStr) {
         if (i == "Diler") {
             countDiler++;
             if (countDiler > 1) {
@@ -14,13 +14,14 @@ TBlackJack::TBlackJack(TConfig config) : Settings(TBlackJackSettings(config)) {
             }
         }
         Players.push_back(
-            TPlayer(i, (i == "Diler") ? SIZE_MAX : Settings.StartBank));
+            TPlayer(i, (i == "Diler") ? SIZE_MAX : Settings.startBank));
     };
 }
 
+
 void TBlackJack::CreateDeck() {
-    if (Settings.ModeDeck) {
-        for (int deck = 0; deck < Settings.ModeDeck; ++deck) {
+    if (Settings.countDeck) {
+        for (int deck = 0; deck < Settings.countDeck; ++deck) {
             for (int j = 0; j < 4; j++) {
                 CurrentDeck.insert(CurrentDeck.begin(), {2, 3, 4, 5, 6, 7, 8, 9,
                                                          10, 10, 10, 10, 11});
@@ -37,7 +38,7 @@ int TBlackJack::GetCard(bool visible) {
     if (CurrentSizeDeck == -1) {
         tmp = rand() % 10 + 2;
     } else {
-        if (CurrentSizeDeck < 0.3 * Settings.ModeDeck * 52) {
+        if (CurrentSizeDeck < 0.3 * Settings.countDeck * 52) {
             ReplenishmentDeck();
         }
         auto iter = CurrentDeck.begin();
@@ -49,14 +50,12 @@ int TBlackJack::GetCard(bool visible) {
     }
     if (visible) {
         AllVisibleCards.push_back(tmp);
-    } else {
-        hideDillerCard = tmp;
-    };
+    }
     return tmp;
 }
 
 void TBlackJack::StartGame() {
-    if (Settings.ModeGame == "detailed") {
+    if (Settings.modeGame == "detailed") {
         Printer::PrintSeparation();
     };
     AllVisibleCards.clear();
@@ -64,21 +63,19 @@ void TBlackJack::StartGame() {
         auto &Hands = i.GetHands();
         Hands.clear();
         Hands.push_back(THand());
-        if (i.GetBank() < Settings.Bet) {
+        if (i.GetBank() < Settings.bet) {
             Hands[0].InGame = false;
             return;
         } else {
             if (&i != &(*Players.end()--)) {
-                Hands[0].MyBet = Settings.Bet;
-                i.GetBank() -= Settings.Bet;
+                Hands[0].MyBet = Settings.bet;
+                i.GetBank() -= Settings.bet;
             }
             Hands[0].InGame = true;
         }
         for (int j = 0; j < 2; ++j) {
-            Hands[0].MyCards.push_back(GetCard(
-                (!i.GetVisible() && Hands[0].MyCards.size() == 0) ? false
-                                                                  : true));
-            ///////
+            Hands[0].MyCards.push_back(
+                GetCard(i.GetVisible() || Hands[0].MyCards.size() != 0));
             Hands[0].MySum += Hands[0].MyCards.back();
         }
     }
@@ -88,12 +85,15 @@ void TBlackJack::StartGame() {
 void TBlackJack::Play() {
     int countP = 0;
     for (auto &i : Players) {
-        Printer::PrintPlayingPlayer(countP, Settings.PlayersStr);
+        Printer::PrintPlayingPlayer(countP, Settings.playersStr);
         i.MakeMove(*this);
         countP++;
     };
-    Printer::PrintSeparationPlayers();
-    Printer::PrintDillerCards(Players.back().GetHands()[false].MyCards);
+    if (Settings.modeGame == "detailed") {
+        Printer::PrintSeparationPlayers();
+        Printer::PrintDillerCards(Players.back().GetHands()[0].MyCards);
+    }
+    Printer::PrintNN();
 }
 
 void TBlackJack::Results() {
@@ -108,8 +108,8 @@ void TBlackJack::Results() {
 
 void TBlackJack::PrintResult() {
     std::vector<std::pair<int, int>> Winner = {{0, 0}}; // numPlayer, maxBank
-    for (size_t playersNum = 0; playersNum < Players.size(); ++playersNum) {
-        Printer::PrintPlayerResult(Settings.PlayersStr[playersNum],
+    for (size_t playersNum = 0; playersNum < Players.size()-1; ++playersNum) {
+        Printer::PrintPlayerResult(Settings.playersStr[playersNum],
                                    Players[playersNum].GetBank(),
                                    playersNum + 1);
         if (Players[playersNum].GetBank() == Winner.begin()->second) {
@@ -125,8 +125,7 @@ void TBlackJack::PrintResult() {
 
     std::vector<std::string> winnersStr;
     for (auto i : Winner) {
-        winnersStr.push_back(Settings.PlayersStr[i.first]);
+        winnersStr.push_back(Settings.playersStr[i.first]);
     }
     Printer::PrintWinner(winnersStr);
-
 }

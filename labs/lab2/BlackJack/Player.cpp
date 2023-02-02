@@ -16,8 +16,8 @@ TPlayer::TPlayer(std::string StrategyName, size_t bankSize) {
     Hands.reserve(2);
 }
 size_t &TPlayer::GetBank() { return MyBank; };
-const int TPlayer::GetSum(bool hand) const { return Hands[hand].MySum; }
-const bool TPlayer::GetVisible() const { return Visible; }
+int TPlayer::GetSum(bool hand) const { return Hands[hand].MySum; }
+bool TPlayer::GetVisible() const { return Visible; }
 std::vector<THand> &TPlayer::GetHands() { return Hands; }
 
 void TPlayer::MoveHand(THand &hand, TBlackJack &table) {

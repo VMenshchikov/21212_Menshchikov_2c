@@ -15,48 +15,56 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Check http://doc.qt.io/qt-5/deployment-android.html for more information.
 # They need to be set before the find_package(Qt5 ...) call.
 
-#if(ANDROID)
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-#    if (ANDROID_ABI STREQUAL "armeabi-v7a")
-#        set(ANDROID_EXTRA_LIBS
-#            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libcrypto.so
-#            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libssl.so)
-#    endif()
-#endif()
 
-find_package(Qt5 COMPONENTS Widgets UiTools REQUIRED)
-#find_package(Qt6 REQUIRED COMPONENTS UiTools)
 
-if(ANDROID)
-  add_library(BlackJack SHARED
-    main.cpp
-    startwindow.cpp
-    startwindow.h
-    startwindow.ui
-    statistic.ui
-    leaders.txt
-    gamewindow.cpp
-    gamewindow.h
-    gamewindow.ui
-    Factory/cardsFactory.cpp
-    Factory/Factory.hpp
+find_package(Qt5 COMPONENTS Widgets UiTools Test REQUIRED)
 
-  )
-else()
+
   add_executable(BlackJack
-    main.cpp
     startwindow.cpp
     startwindow.h
     startwindow.ui
-    leaders.txt
+    ../resourses/leaders.txt
     gamewindow.ui
     gamewindow.h
     gamewindow.cpp
-    Factory/cardsFactory.cpp
     Factory/Factory.hpp
-  )
-endif()
 
-#target_link_libraries(BlackJack PRIVATE Qt6::UiTools)
+    ../../controller/controller.cpp
+    ../../controller/controller.hpp
+    ../../controller/playerUI.hpp
+    ../../controller/playerUI.cpp
 
-target_link_libraries(BlackJack PRIVATE Qt5::Widgets)
+
+    ../../game/strategies/Strategy.hpp
+    ../../game/strategies/Diler/DilerStrategy.cpp
+    ../../game/strategies/Diler/DilerStrategy.hpp
+#   ../../game/strategies/CopyDil/CopyDilerStrategy.cpp
+#   ../../game/strategies/CopyDil/CopyDilerStrategy.hpp
+#   ../../game/strategies/Player/PlayerStrategy.hpp
+#   ../../game/strategies/Player/PlayerStrategy.cpp
+
+#    ../../game/strategies/SimpleStrategies/OneHit/OneHit.cpp
+#    ../../game/strategies/SimpleStrategies/OneHit/OneHit.hpp
+#    ../../game/strategies/SimpleStrategies/TwoHit/TwoHit.cpp
+#    ../../game/strategies/SimpleStrategies/TwoHit/TwoHit.hpp
+#    ../../game/strategies/SimpleStrategies/SplitAndHit/SplitAndHit.cpp
+#    ../../game/strategies/SimpleStrategies/SplitAndHit/SplitAndHit.hpp
+#    ../../game/strategies/SimpleStrategies/DoubleDown/DoubleDown.cpp
+#    ../../game/strategies/SimpleStrategies/DoubleDown/DoubleDown.hpp
+
+    ../../game/BlackJack/BlackJack.cpp
+    ../../game/BlackJack/BlackJack.hpp
+    ../../game/BlackJack/BlackJackSettings.cpp
+    ../../game/BlackJack/BlackJackSettings.hpp
+    ../../game/BlackJack/EnumAction.hpp
+    ../../game/BlackJack/Player.cpp
+    ../../game/BlackJack/Player.hpp
+    ../../game/BlackJack/PlayerHand.hpp
+    ../../game/BlackJack/Printer.hpp
+
+    ../../game.cpp
+    )
+
+
+target_link_libraries(BlackJack PRIVATE Qt5::Widgets Qt5::Test)
