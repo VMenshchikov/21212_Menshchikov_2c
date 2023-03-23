@@ -9,6 +9,6 @@ public class CommandGet implements ICommand{
         MyPair<Integer, Integer> pos = new MyPair<Integer, Integer>();
         pos.setSecond(data.popStack().intValue());
         pos.setFirst(data.popStack().intValue());
-        data.pushStack(data.getCode(pos));
+        data.pushStack(data.getCode(pos) - '0');
     }
 }

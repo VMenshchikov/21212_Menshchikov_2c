@@ -1,9 +1,7 @@
 package interpreter.command;
 
 import java.util.Scanner;
-import java.lang.Thread;
 import interpreter.data.Data;
-import java.util.InputMismatchException;
 
 public class CommandInputInt implements ICommand{
     @Override

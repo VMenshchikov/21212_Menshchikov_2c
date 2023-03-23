@@ -7,9 +7,10 @@ public class CommandPut implements ICommand {
     @Override
     public void execute(Data data) {
         MyPair<Long, Long> pos = new MyPair<>();
-        char ch = (char)data.popStack().intValue();
+        pos.setSecond((Long)data.popStack().longValue());
         pos.setFirst(data.popStack().longValue());
-        pos.setSecond(data.popStack().longValue());
+        char ch = (char)(data.popStack().intValue() + '0');
+
         data.setCode(pos, ch);
     }
 }

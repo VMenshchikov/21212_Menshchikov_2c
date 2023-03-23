@@ -5,7 +5,7 @@ import interpreter.data.Data;
 public class CommandGreater implements ICommand{
     @Override
     public void execute(Data data) {
-        var tmp = data.popStack();
-        data.pushStack((data.popStack() > tmp) ? 1 : 0);
+        var value2 = data.popStack();
+        data.pushStack((data.popStack() > value2) ? 1l : 0l);
     }
 }

@@ -6,18 +6,28 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.lang.RuntimeException;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 
 import my.MyPair;
 
+
+/**
+ * Хранит и обрабатывает код Befunge-93
+ */
 public class Data{
     private eDirection direction = eDirection.RIGHT;
     private ArrayList<char[]> code = new ArrayList<>();
-    private LinkedList<Long> stack;
+    private LinkedList<Long> stack = new LinkedList<Long>();
     private MyPair<Integer, Integer> pos = new MyPair<>(-1,0);
     private MyPair<Integer, Integer> sizeCode = new MyPair<>(0,0);
-
+           
+    /**
+     * Загружает данные из файла 'f' и фиксирует размер кода 'xSize', 'ySize'
+     * @param f
+     * @param xSize
+     * @param ySize
+     */
     public void loadData(File f, Integer xSize, Integer ySize) {
         try (Scanner sc = new Scanner(f);) {
             sizeCode.setFirst(xSize);
@@ -40,6 +50,10 @@ public class Data{
         }
     }
 
+    /**
+     * @return следующий символ кода в заданном направлении 
+     * @see setDirections  
+     * */ 
     public char getNextChar() {
             switch (direction) {
                 case  LEFT:
@@ -58,19 +72,30 @@ public class Data{
                     pos.setSecond((pos.getSecond() + 1) % sizeCode.getSecond()); // ++y % maxY
                     return code.get(pos.getSecond())[pos.getFirst()]; //return -//-                
                 default:
-                    exit("enum???");
+                    exit("enum???");   //???????????????????????????????????????????????????????
             }
         return ' '; // иначе ругается
     }
     
+    /**
+     * устанавливает направление движения для дальнейшего исполнения
+     * @see getNextChar
+     */
     public void setDirections(eDirection d) {
         direction = d;
     }
 
+    /**
+     * Пропускает следующий символ кода
+     */
     public void skipCh() {
         getNextChar(); //  не обрабатываем
     }
 
+    /**
+     * @return верхний объект стека программы, если стек пустой,
+     * то возвращает 0
+     */
     public Long popStack() {
         if (stack.size() == 0) {
             return 0l;
@@ -78,13 +103,19 @@ public class Data{
         return stack.removeFirst();       
     }
 
+    /**
+     * Кладет Long на стек программы 
+     * @param i
+     */
     public void pushStack(long i) {
-        if (stack == null) {
-            stack = new LinkedList<Long>();
-        }
         stack.addFirst(i);
     }
 
+    /**
+     * Кладет Character на стек программы
+     * Преобразует Character в Long 
+     * @param c
+     */
     public void pushStack(Character c) {
         pushStack((long)Character.getNumericValue(c));
     }
@@ -93,10 +124,25 @@ public class Data{
         throw new RuntimeException(str);
     }
 
+    /**
+     * Меняет код программы. Кладет в ячейку (coord.first, coord.second)
+     * символ ch
+     * @param coord
+     * @param ch
+     * @see MyPair
+     */
     public void setCode(MyPair<Long, Long> coord, Character ch) {
-        code.get(pos.getSecond())[pos.getFirst()] = ch;
+        code.get(coord.getSecond().intValue())[coord.getFirst().intValue()] = ch;
+        return;
     }
 
+    /**
+     * @param coord
+     * @return Достает из ячейки (cord.first, coord,second)
+     *  символ и кладет на стек, ячейка не затирается
+     * @see pushStack
+     * @see MyPair
+     */
     public char getCode(MyPair<Integer, Integer> coord) {
         return code.get(coord.getSecond())[coord.getFirst()];
     }

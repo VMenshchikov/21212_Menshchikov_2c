@@ -6,15 +6,26 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Uni
+ * Универсальная фабрика, загружает и возвращает объукт класса 
+ * ReturnTypeObject 
  */
 public class MyFactory<ReturnObjectType> {
     private HashMap<String, Class<?>> map = new HashMap<String, Class<?>>();
     private final Properties cfg;
     
+    /**
+     * Конструктор, устанавлювающий конфигурационный файл, 
+     * все запросы к фабрике будут пропускаться через cfg
+     * @param cfg
+     */
     public MyFactory(Properties cfg) {
         this.cfg = cfg;
     };
+    
+    /**
+     * Конструктор по умолчанию, 
+     * каждый переданный ключ будет использоваться на прямую
+     */
     public MyFactory(){
         cfg = null;
     };
@@ -40,6 +51,19 @@ public class MyFactory<ReturnObjectType> {
         return map.get(tmp).getConstructor(argsType);
     }
 
+    /**
+     * @param k
+     * @param args
+     * @return возвращает загруженный класс по этому ключу
+     * и созданный конструктором с аргументами 'args' типа ReturnTypeObject
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws IllegalArgumentException
+     * @throws InvocationTargetException
+     * @throws ClassNotFoundException
+     * @throws NoSuchMethodException
+     * @throws SecurityException
+     */
     public ReturnObjectType getObject(String k, Object ... args) throws InstantiationException,
                                                                         IllegalAccessException,
                                                                         IllegalArgumentException,

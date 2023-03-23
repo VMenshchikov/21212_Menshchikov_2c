@@ -10,7 +10,11 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 
-
+/** 
+ * Основной метод интерпретатора Befunge-93
+ * Использует 'Data' для определения начальных параметров 
+ * @see Data
+*/
 public class Interpreter {
     private Data data;
 
@@ -18,6 +22,14 @@ public class Interpreter {
         data = new Data();
     }
     
+    /**
+     * 
+     * @param xSize Размер поля по координате Х
+     * @param ySize Размер поля по координате Х
+     * @param code Файл с кодом программы
+     * @param config properties файл для фабрики
+     * @see MyFactory
+     */
     public void ПожалуйстаИнтерпретируйЭто(int xSize, int ySize, File code, File config) {
         try {
             Properties conf = new Properties();
@@ -40,7 +52,7 @@ public class Interpreter {
                  IllegalArgumentException | InvocationTargetException |
                  ClassNotFoundException | NoSuchMethodException  a ) {
                     RuntimeException ex = new RuntimeException(a.getMessage());
-                    ex.setStackTrace(a.getStackTrace());
+                    a.printStackTrace();
                     throw ex;
         }
     }
