@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #010a3c; -fx-border-color: #d08000; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.startWindow.StartController">
+   <children>
+      <Button fx:id="playButton" layoutX="327.0" layoutY="507.0" mnemonicParsing="false" prefHeight="176.0" prefWidth="346.0" style="-fx-background-color: rgba(0, 0, 0, 0);" text="Play" textAlignment="CENTER">
+         <font>
+            <Font name="Quicksand Medium" size="96.0" />
+         </font>
+         <textFill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.9490196108818054" green="0.8980392217636108" blue="0.1921568661928177" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.8120805369127516">
+                     <color>
+                        <Color red="0.8600000143051147" green="0.6509341597557068" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.8600000143051147" green="0.6509341597557068" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </textFill>
+      </Button>
+      <Text layoutX="320.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PacMan">
+         <font>
+            <Font name="Quicksand Medium" size="96.0" />
+         </font>
+         <fill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.9490196108818054" green="0.8980392217636108" blue="0.1921568661928177" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.6946308724832214">
+                     <color>
+                        <Color red="0.8815789222717285" green="0.6632248759269714" blue="0.008162767626345158" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.8815789222717285" green="0.6632248759269714" blue="0.008162767626345158" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Text>
+      <Text layoutX="396.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Player">
+         <font>
+            <Font name="Quicksand Medium" size="34.0" />
+         </font>
+         <fill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.9490196108818054" green="0.8980392217636108" blue="0.1921568661928177" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.6946308724832214">
+                     <color>
+                        <Color red="0.8815789222717285" green="0.6632248759269714" blue="0.008162767626345158" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.8815789222717285" green="0.6632248759269714" blue="0.008162767626345158" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Text>
+      <Text layoutX="350.0" layoutY="357.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create New Player">
+         <font>
+            <Font name="Quicksand Medium" size="34.0" />
+         </font>
+         <fill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.9490196108818054" green="0.8980392217636108" blue="0.1921568661928177" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.6946308724832214">
+                     <color>
+                        <Color red="0.8815789222717285" green="0.6632248759269714" blue="0.008162767626345158" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.8815789222717285" green="0.6632248759269714" blue="0.008162767626345158" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Text>
+      <TextField fx:id="newPlayerField" layoutX="381.0" layoutY="394.0" prefHeight="30.0" prefWidth="239.0" promptText="NewPalyer" style="-fx-background-color: rgba(0, 0, 0, 0); -fx-border-color: #d08000; -fx-border-radius: 15; -fx-border-width: 3;">
+         <font>
+            <Font name="Quicksand Light" size="16.0" />
+         </font>
+      </TextField>
+      <ImageView fx:id="pacmanImage" fitHeight="199.0" fitWidth="210.0" layoutX="55.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@packman.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="pacmanLeadersImage" fitHeight="199.0" fitWidth="210.0" layoutX="746.0" layoutY="85.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@packman.png" />
+         </image>
+      </ImageView>
+      <ChoiceBox fx:id="selectPlayerBox" layoutX="401.0" layoutY="194.0" prefHeight="24.0" prefWidth="199.0" />
+      <ImageView fx:id="diagramImage" fitHeight="276.0" fitWidth="199.0" layoutX="58.0" layoutY="375.0" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@pacman-diagram.png" />
+         </image>
+      </ImageView>
+      <TextArea fx:id="leadersTextArea" editable="false" layoutX="743.0" layoutY="314.0" prefHeight="297.0" prefWidth="200.0" visible="false" />
+   </children>
+</AnchorPane>
