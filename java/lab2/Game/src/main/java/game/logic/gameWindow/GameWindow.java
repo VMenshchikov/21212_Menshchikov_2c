@@ -27,7 +27,7 @@ public class GameWindow {
                     {24, 25, 25, 4, 38, 11, 25, 5, 40, 11}};
     int[] delay = {0, 2000, 5000, 10000};
     Brain[] brains = {new RandomBrain(), new StupidConvergence(), new RandomConvergence(), new RadiusConvergence()};
-    String[] colors = {"aa", "pink", "yellow", "blue"};
+    String[] colors = {"red", "pink", "yellow", "blue"};
     int lives = 3;
     private int currentEatCount = 0;
     public int getCurrentEatCount() { return currentEatCount; }

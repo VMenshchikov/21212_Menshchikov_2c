@@ -1,6 +1,5 @@
 package game.view.gameWindow;
 
-import game.control.gameWindow.GameController;
 import game.logic.table.infoEnums.Direction;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

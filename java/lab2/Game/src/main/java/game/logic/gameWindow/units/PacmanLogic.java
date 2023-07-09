@@ -15,6 +15,4 @@ public class PacmanLogic extends UnitLogic {
         curPos.posY = startY;
         spawnPos = new PosUnit(curPos);
     }
-    //Canvas canvas;
-
 }
